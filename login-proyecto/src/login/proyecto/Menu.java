@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package login.proyecto;
 
 public class Menu extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Menu.class.getName());
 
     public Menu() {
@@ -24,9 +20,9 @@ public class Menu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Mantenimiento de usuarios");
-        jButton2.setText("Reinicio de clave");
-        jButton3.setText("Cerrar sesion");
+        jButton1.setText("User Management");
+        jButton2.setText("Reset Password");
+        jButton3.setText("Log Out");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -36,7 +32,7 @@ public class Menu extends javax.swing.JFrame {
                 {null, null, null}
             },
             new String [] {
-                "Usuarios", "Rol", "Estado"
+                "Users", "Role", "Status"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
