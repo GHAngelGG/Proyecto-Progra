@@ -1,15 +1,15 @@
-# Login Proyecto
+# Login Project
 
-Proyecto de sistema de login desarrollado en Apache NetBeans con Java Swing.
+Login system project built with Apache NetBeans and Java Swing.
 
-## Pantallas
+## Screens
 
-- **Inicio** — formulario de login con usuario y contraseña
-- **Menu** — panel principal con tabla de usuarios y opciones
-- **Mantenimiento** — edición de usuarios (nombre, rol, estado)
-- **Reinicio** — formulario para reinicio de contraseña
+- **Inicio** — login form with username and password fields
+- **Menu** — main panel with user table and navigation options
+- **Mantenimiento** — edit user details (username, role, status)
+- **Reinicio** — password reset form with validation rules
 
-## Tecnologías
+## Technologies
 
 - Java
 - Java Swing (GUI)
