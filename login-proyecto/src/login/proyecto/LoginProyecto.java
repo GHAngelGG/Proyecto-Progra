@@ -14,7 +14,12 @@ public class LoginProyecto {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        // Use Metal L&F so custom button/component colors render correctly
+        try {
+            javax.swing.UIManager.setLookAndFeel(
+                javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception ignored) {}
+        java.awt.EventQueue.invokeLater(() -> new Inicio().setVisible(true));
     }
     
 }
