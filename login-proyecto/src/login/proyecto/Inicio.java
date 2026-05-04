@@ -75,11 +75,11 @@ public class Inicio extends javax.swing.JFrame {
         jButtonSignIn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("System Login");
+        setTitle("Vista Verde — System Login");
         getContentPane().setLayout(null);
 
         jLabelHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelHeader.setText("System Login");
+        jLabelHeader.setText("Vista Verde Login");
         getContentPane().add(jLabelHeader);
         jLabelHeader.setBounds(0, 0, 370, 60);
 
