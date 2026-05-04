@@ -167,7 +167,6 @@ public class Mantenimiento extends javax.swing.JFrame {
                 "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
         }
 
-        if (parentMenu != null) parentMenu.refreshUserTable();
         dispose();
     }
 
