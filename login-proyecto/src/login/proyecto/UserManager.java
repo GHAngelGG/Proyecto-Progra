@@ -23,7 +23,9 @@ public class UserManager {
     }
 
     private UserManager() {
-        // Credentials follow password policy: 13+ chars, 1 uppercase, 1 special char
+        // Official system credential as per project specification
+        users.add(new User("iusr_vistaverde", "R3sidencial2026%", "Admin", "Active"));
+        // Development accounts
         users.add(new User("sysadmin",   "Syst3m@Admin2025!",  "Admin",   "Active"));
         users.add(new User("opsmanager", "Ops@M4nager2025!",   "Manager", "Active"));
         users.add(new User("jdoe",       "Jd0e#Secure2025!",   "User",    "Active"));
