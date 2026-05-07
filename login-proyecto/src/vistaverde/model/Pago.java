@@ -8,8 +8,8 @@ public class Pago {
 
     // Arreglo con los nombres de los meses, índice 0 vacío para que coincida con 1=Enero
     private static final String[] NOMBRES_MESES = {
-        "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        "", "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
     };
 
     public Pago(int mes, int anio, double monto) {
