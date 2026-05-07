@@ -52,27 +52,26 @@ public class Condominio {
         Casa c = getCasa(numeroCasa);
 
         if (!c.tienePropietario()) {
-            return "La casa " + numeroCasa + " no tiene propietario registrado.";
+            return "House " + numeroCasa + " has no registered owner.";
         }
 
         if (c.tienePago(mes, anio)) {
-            return "La casa " + numeroCasa + " ya tiene registrado el pago de "
+            return "House " + numeroCasa + " already has a payment recorded for "
                     + Pago.getNombreMes(mes) + " " + anio + ".";
         }
 
-        // No se permiten pagos de meses futuros
+        // Future month payments are not allowed
         int mesActual = LocalDate.now().getMonthValue();
         int anioActual = LocalDate.now().getYear();
 
         if (anio > anioActual || (anio == anioActual && mes > mesActual)) {
-            return "No se puede registrar el pago de un mes futuro.";
+            return "Cannot register a payment for a future month.";
         }
 
-        // Verifica que los meses anteriores del mismo año estén pagados
+        // Previous months of the same year must be paid first
         for (int m = 1; m < mes; m++) {
             if (!c.tienePago(m, anio)) {
-                return "Debe registrar primero el pago de "
-                        + Pago.getNombreMes(m) + " " + anio + " antes de continuar.";
+                return "Please register " + Pago.getNombreMes(m) + " " + anio + " payment first.";
             }
         }
 
