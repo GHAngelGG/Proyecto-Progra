@@ -78,7 +78,7 @@ public class Menu extends JFrame {
         grid.setBackground(C_BG);
 
         grid.add(moduleButton("Register Owner",        "Add or view property owners",       this::openRegisterOwner));
-        grid.add(moduleButton("Register Payment",      "Record monthly fee payments",        this::openComingSoon));
+        grid.add(moduleButton("Register Payment",      "Record monthly fee payments",        this::openRegisterPayment));
         grid.add(moduleButton("Fee Configuration",     "Update the monthly fee amount",      this::openComingSoon));
         grid.add(moduleButton("Account Statement",     "View payment history by house",      this::openComingSoon));
         grid.add(moduleButton("General Report",        "Summary of condominium income",      this::openComingSoon));
@@ -137,6 +137,10 @@ public class Menu extends JFrame {
 
     private void openRegisterOwner() {
         new RegistroPropietario(this).setVisible(true);
+    }
+
+    private void openRegisterPayment() {
+        new RegisterPayment(this).setVisible(true);
     }
 
     private void openComingSoon() {
