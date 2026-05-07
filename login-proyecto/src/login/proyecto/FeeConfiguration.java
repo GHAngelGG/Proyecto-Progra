@@ -31,7 +31,7 @@ public class FeeConfiguration extends JFrame {
         add(buildCenter(), BorderLayout.CENTER);
         add(buildFooter(), BorderLayout.SOUTH);
 
-        setPreferredSize(new Dimension(420, 300));
+        setPreferredSize(new Dimension(440, 420));
         pack();
         setLocationRelativeTo(parent);
     }
@@ -52,10 +52,10 @@ public class FeeConfiguration extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createEmptyBorder(24, 32, 16, 32),
+            BorderFactory.createEmptyBorder(16, 24, 12, 24),
             BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(C_BORDER),
-                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+                BorderFactory.createEmptyBorder(14, 16, 14, 16)
             )
         ));
 
