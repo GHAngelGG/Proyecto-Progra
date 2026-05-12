@@ -2,6 +2,9 @@ package login.proyecto;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public class Menu extends JFrame {
 
@@ -48,7 +51,9 @@ public class Menu extends JFrame {
         title.setFont(new Font("Arial", Font.BOLD, 20));
         texts.add(title);
 
-        JLabel subtitle = new JLabel("Administration System", SwingConstants.CENTER);
+        String monthYear = LocalDate.now().getMonth()
+                .getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + LocalDate.now().getYear();
+        JLabel subtitle = new JLabel("Administration System  —  " + monthYear, SwingConstants.CENTER);
         subtitle.setForeground(new Color(180, 180, 180));
         subtitle.setFont(new Font("Arial", Font.PLAIN, 12));
         texts.add(subtitle);
