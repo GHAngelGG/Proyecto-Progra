@@ -82,7 +82,7 @@ public class Menu extends JFrame {
         grid.add(moduleButton("Fee Configuration",     "Update the monthly fee amount",      this::openFeeConfiguration));
         grid.add(moduleButton("Account Statement",     "View payment history by house",      this::openAccountStatement));
         grid.add(moduleButton("General Report",        "Summary of condominium income",      this::openGeneralReport));
-        grid.add(moduleButton("Delinquent Houses",     "List of houses with pending fees",   this::openComingSoon));
+        grid.add(moduleButton("Delinquent Houses",     "List of houses with pending fees",   this::openDelinquentHouses));
 
         outer.add(grid, BorderLayout.CENTER);
         return outer;
@@ -153,6 +153,10 @@ public class Menu extends JFrame {
 
     private void openGeneralReport() {
         new GeneralReport(this).setVisible(true);
+    }
+
+    private void openDelinquentHouses() {
+        new DelinquentHouses(this).setVisible(true);
     }
 
     private void openComingSoon() {
