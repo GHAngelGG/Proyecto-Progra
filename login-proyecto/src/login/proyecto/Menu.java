@@ -135,28 +135,41 @@ public class Menu extends JFrame {
         return btn;
     }
 
+    /** Opens a sub-screen and blocks the menu until the sub-screen is closed. */
+    private void openAndBlock(JFrame screen) {
+        setEnabled(false);
+        screen.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                setEnabled(true);
+                toFront();
+            }
+        });
+        screen.setVisible(true);
+    }
+
     private void openRegisterOwner() {
-        new RegistroPropietario(this).setVisible(true);
+        openAndBlock(new RegistroPropietario(this));
     }
 
     private void openRegisterPayment() {
-        new RegisterPayment(this).setVisible(true);
+        openAndBlock(new RegisterPayment(this));
     }
 
     private void openFeeConfiguration() {
-        new FeeConfiguration(this).setVisible(true);
+        openAndBlock(new FeeConfiguration(this));
     }
 
     private void openAccountStatement() {
-        new AccountStatement(this).setVisible(true);
+        openAndBlock(new AccountStatement(this));
     }
 
     private void openGeneralReport() {
-        new GeneralReport(this).setVisible(true);
+        openAndBlock(new GeneralReport(this));
     }
 
     private void openDelinquentHouses() {
-        new DelinquentHouses(this).setVisible(true);
+        openAndBlock(new DelinquentHouses(this));
     }
 
     private void openComingSoon() {
