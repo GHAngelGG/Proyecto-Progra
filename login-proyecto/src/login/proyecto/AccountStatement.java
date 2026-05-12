@@ -33,6 +33,7 @@ public class AccountStatement extends JFrame {
     private JTextField tfOwnerName;
     private JTextField tfTotalPaid;
     private DefaultTableModel tableModel;
+    private JTextArea taPending;
     private JLabel lblStatus;
 
     public AccountStatement(JFrame parent) {
@@ -149,7 +150,7 @@ public class AccountStatement extends JFrame {
         tfTotalPaid   = addReadOnlyField(panel, "Total paid:");
 
         panel.add(Box.createVerticalStrut(6));
-        addSectionTitle(panel, "Payment History");
+        addSectionTitle(panel, "Paid months");
         panel.add(Box.createVerticalStrut(8));
 
         String[] columns = {"Month", "Year", "Amount (Q)"};
@@ -166,8 +167,6 @@ public class AccountStatement extends JFrame {
         table.setSelectionBackground(new Color(210, 230, 255));
         table.setGridColor(C_BORDER);
         table.setShowGrid(true);
-
-        // Column widths
         table.getColumnModel().getColumn(0).setPreferredWidth(110);
         table.getColumnModel().getColumn(1).setPreferredWidth(60);
         table.getColumnModel().getColumn(2).setPreferredWidth(90);
@@ -175,7 +174,25 @@ public class AccountStatement extends JFrame {
         JScrollPane sp = new JScrollPane(table);
         sp.setAlignmentX(Component.LEFT_ALIGNMENT);
         sp.setBorder(BorderFactory.createLineBorder(C_BORDER));
+        sp.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
         panel.add(sp);
+
+        panel.add(Box.createVerticalStrut(8));
+        addSectionTitle(panel, "Pending months (this year):");
+        panel.add(Box.createVerticalStrut(6));
+
+        taPending = new JTextArea(2, 20);
+        taPending.setEditable(false);
+        taPending.setFont(new Font("Arial", Font.PLAIN, 12));
+        taPending.setBackground(new Color(255, 240, 240));
+        taPending.setForeground(new Color(160, 30, 30));
+        taPending.setWrapStyleWord(true);
+        taPending.setLineWrap(true);
+        JScrollPane spPending = new JScrollPane(taPending);
+        spPending.setAlignmentX(Component.LEFT_ALIGNMENT);
+        spPending.setMaximumSize(new Dimension(Integer.MAX_VALUE, 55));
+        spPending.setBorder(BorderFactory.createLineBorder(C_BORDER));
+        panel.add(spPending);
 
         return panel;
     }
@@ -297,6 +314,23 @@ public class AccountStatement extends JFrame {
                 });
             }
         }
+
+        // Pending months for current year
+        int currentMonth = java.time.LocalDate.now().getMonthValue();
+        int currentYear  = java.time.LocalDate.now().getYear();
+        java.util.ArrayList<Integer> pending = house.getMesesPendientes(currentMonth, currentYear);
+        if (pending.isEmpty()) {
+            taPending.setText("No pending months — all paid up to date.");
+            taPending.setForeground(new Color(34, 139, 60));
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int m : pending) {
+                if (sb.length() > 0) sb.append(", ");
+                sb.append(MONTHS[m - 1]);
+            }
+            taPending.setText(sb.toString());
+            taPending.setForeground(new Color(160, 30, 30));
+        }
     }
 
     private void clearInfo() {
@@ -304,6 +338,7 @@ public class AccountStatement extends JFrame {
         tfOwnerName.setText("");
         tfTotalPaid.setText("");
         tableModel.setRowCount(0);
+        taPending.setText("");
     }
 
     private void refreshMapColors() {
