@@ -119,7 +119,7 @@ public class DelinquentHouses extends JFrame {
     }
 
     private JScrollPane buildTable() {
-        String[] columns = {"House", "Owner", "Pending months this year", "Amount owed (Q)"};
+        String[] columns = {"House", "Owner", "Phone", "Pending months", "Amount owed (Q)"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -136,20 +136,21 @@ public class DelinquentHouses extends JFrame {
         table.getTableHeader().setForeground(Color.WHITE);
         table.getTableHeader().setReorderingAllowed(false);
 
-        table.getColumnModel().getColumn(0).setPreferredWidth(55);
-        table.getColumnModel().getColumn(1).setPreferredWidth(160);
-        table.getColumnModel().getColumn(2).setPreferredWidth(180);
-        table.getColumnModel().getColumn(3).setPreferredWidth(120);
+        table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        table.getColumnModel().getColumn(1).setPreferredWidth(150);
+        table.getColumnModel().getColumn(2).setPreferredWidth(90);
+        table.getColumnModel().getColumn(3).setPreferredWidth(150);
+        table.getColumnModel().getColumn(4).setPreferredWidth(110);
 
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable t, Object val,
                     boolean sel, boolean focus, int row, int col) {
                 super.getTableCellRendererComponent(t, val, sel, focus, row, col);
-                setHorizontalAlignment(col >= 3 ? RIGHT : (col == 0 ? CENTER : LEFT));
+                setHorizontalAlignment(col == 0 || col == 4 ? CENTER : LEFT);
                 if (!sel) {
                     setBackground(row % 2 == 0 ? Color.WHITE : C_ROW_ALT);
-                    setForeground(col == 3 ? C_DANGER : Color.BLACK);
+                    setForeground(col == 4 ? C_DANGER : Color.BLACK);
                 }
                 return this;
             }
@@ -221,6 +222,7 @@ public class DelinquentHouses extends JFrame {
             tableModel.addRow(new Object[]{
                 c.getNumero(),
                 c.getPropietario().getNombre(),
+                c.getPropietario().getTelefono(),
                 pendingStr.toString(),
                 String.format("Q %.2f", owed)
             });
