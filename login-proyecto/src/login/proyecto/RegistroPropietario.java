@@ -5,6 +5,10 @@ import vistaverde.model.Casa;
 import vistaverde.model.Condominio;
 import vistaverde.model.Propietario;
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
 
 public class RegistroPropietario extends JFrame {
@@ -148,10 +152,30 @@ public class RegistroPropietario extends JFrame {
         panel.add(hint);
         panel.add(Box.createVerticalStrut(18));
 
-        tfHouseNumber = addField(panel, "House number:",    true);
-        tfFullName    = addField(panel, "Full name:",       false);
-        tfPhone       = addField(panel, "Phone:",           false);
-        tfEmail       = addField(panel, "Email address:",   false);
+        tfHouseNumber = addField(panel, "House number:",              true);
+        tfFullName    = addField(panel, "Full name:",                false);
+        tfPhone       = addField(panel, "Phone (8 digits):",         false);
+        tfEmail       = addField(panel, "Email address:",            false);
+
+        // Only allow digits in phone field, max 8 characters
+        ((AbstractDocument) tfPhone.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr)
+                    throws BadLocationException {
+                String digits = text.replaceAll("[^0-9]", "");
+                if (fb.getDocument().getLength() + digits.length() <= 8) {
+                    super.insertString(fb, offset, digits, attr);
+                }
+            }
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                    throws BadLocationException {
+                String digits = text.replaceAll("[^0-9]", "");
+                if (fb.getDocument().getLength() - length + digits.length() <= 8) {
+                    super.replace(fb, offset, length, digits, attrs);
+                }
+            }
+        });
 
         return panel;
     }
@@ -269,13 +293,18 @@ public class RegistroPropietario extends JFrame {
             tfPhone.requestFocus();
             return;
         }
+        if (phone.length() != 8) {
+            setStatus("Phone must be exactly 8 digits (Guatemala format).", false);
+            tfPhone.requestFocus();
+            return;
+        }
         if (email.isEmpty()) {
             setStatus("Email address is required.", false);
             tfEmail.requestFocus();
             return;
         }
-        if (!email.contains("@") || !email.contains(".")) {
-            setStatus("Please enter a valid email address.", false);
+        if (!email.matches("^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$")) {
+            setStatus("Invalid email. Use format: name@domain.com", false);
             tfEmail.requestFocus();
             return;
         }
