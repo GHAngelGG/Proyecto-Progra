@@ -14,11 +14,16 @@ public class LoginProyecto {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // Use Metal L&F so custom button/component colors render correctly
+        // Apply FlatLaf modern look and feel
         try {
-            javax.swing.UIManager.setLookAndFeel(
-                javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception ignored) {}
+            javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+        } catch (Exception ex) {
+            // Fallback to Metal L&F if FlatLaf is not available
+            try {
+                javax.swing.UIManager.setLookAndFeel(
+                    javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception ignored) {}
+        }
         java.awt.EventQueue.invokeLater(() -> new Inicio().setVisible(true));
     }
     
