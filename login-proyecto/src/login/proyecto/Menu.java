@@ -80,9 +80,9 @@ public class Menu extends JFrame {
         grid.add(moduleButton("Register Owner",        "Add or view property owners",       this::openRegisterOwner));
         grid.add(moduleButton("Register Payment",      "Record monthly fee payments",        this::openRegisterPayment));
         grid.add(moduleButton("Fee Configuration",     "Update the monthly fee amount",      this::openFeeConfiguration));
-        grid.add(moduleButton("Account Statement",     "View payment history by house",      this::openComingSoon));
-        grid.add(moduleButton("General Report",        "Summary of condominium income",      this::openComingSoon));
-        grid.add(moduleButton("Delinquent Houses",     "List of houses with pending fees",   this::openComingSoon));
+        grid.add(moduleButton("Account Statement",     "View payment history by house",      this::openAccountStatement));
+        grid.add(moduleButton("General Report",        "Summary of condominium income",      this::openGeneralReport));
+        grid.add(moduleButton("Delinquent Houses",     "List of houses with pending fees",   this::openDelinquentHouses));
 
         outer.add(grid, BorderLayout.CENTER);
         return outer;
@@ -135,16 +135,41 @@ public class Menu extends JFrame {
         return btn;
     }
 
+    /** Opens a sub-screen and blocks the menu until the sub-screen is closed. */
+    private void openAndBlock(JFrame screen) {
+        setEnabled(false);
+        screen.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                setEnabled(true);
+                toFront();
+            }
+        });
+        screen.setVisible(true);
+    }
+
     private void openRegisterOwner() {
-        new RegistroPropietario(this).setVisible(true);
+        openAndBlock(new RegistroPropietario(this));
     }
 
     private void openRegisterPayment() {
-        new RegisterPayment(this).setVisible(true);
+        openAndBlock(new RegisterPayment(this));
     }
 
     private void openFeeConfiguration() {
-        new FeeConfiguration(this).setVisible(true);
+        openAndBlock(new FeeConfiguration(this));
+    }
+
+    private void openAccountStatement() {
+        openAndBlock(new AccountStatement(this));
+    }
+
+    private void openGeneralReport() {
+        openAndBlock(new GeneralReport(this));
+    }
+
+    private void openDelinquentHouses() {
+        openAndBlock(new DelinquentHouses(this));
     }
 
     private void openComingSoon() {
