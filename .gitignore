@@ -5,6 +5,10 @@
 # SQLite local database (do not commit user data)
 *.db
 
+# Email credentials (NEVER commit this file)
+email.properties
+login-proyecto/email.properties
+
 # OS
 .DS_Store
 Thumbs.db
