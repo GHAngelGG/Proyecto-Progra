@@ -13,6 +13,9 @@ public class AppContext {
 
     private AppContext() {
         this.condominio = new Condominio();
+        // Initialize SQLite database and load existing data
+        Database.init();
+        Database.loadInto(this.condominio);
     }
 
     public static AppContext getInstance() {
