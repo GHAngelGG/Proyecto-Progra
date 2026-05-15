@@ -2,6 +2,7 @@ package vistaverde;
 
 import vistaverde.model.Pago;
 import vistaverde.model.Propietario;
+import java.io.FileInputStream;
 import java.util.Properties;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -15,28 +16,44 @@ import javax.mail.internet.MimeMessage;
 /**
  * Sends a payment confirmation email to the owner.
  *
- * Uses Gmail SMTP. The sender credentials must be configured below.
- * For Gmail you need an App Password (NOT your regular Gmail password):
- *   https://myaccount.google.com/apppasswords
+ * Reads sender credentials from "email.properties" in the project root.
+ * The file is gitignored so the password never gets committed.
  *
- * If credentials are not set, the email is silently skipped so the app
- * still works without crashing.
+ * Required keys:
+ *   sender.email     = your.gmail@gmail.com
+ *   sender.password  = 16-char Gmail app password (no spaces)
+ *
+ * If the file is missing or empty, the email is silently skipped.
  */
 public class EmailSender {
 
-    // ── CONFIGURATION ─────────────────────────────────────────────────────────
-    // Change these two lines with your Gmail and the 16-char app password.
-    private static final String SENDER_EMAIL    = "joseangmil100@gmail.com";
-    private static final String SENDER_APP_PASS = "your_app_password_here";
-
+    private static final String CONFIG_FILE = "email.properties";
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
+
+    private static String senderEmail = null;
+    private static String senderPass  = null;
+
+    static {
+        loadConfig();
+    }
+
+    private static void loadConfig() {
+        try (FileInputStream in = new FileInputStream(CONFIG_FILE)) {
+            Properties cfg = new Properties();
+            cfg.load(in);
+            senderEmail = cfg.getProperty("sender.email");
+            senderPass  = cfg.getProperty("sender.password");
+        } catch (Exception e) {
+            System.out.println("[EmailSender] email.properties not found, emails disabled.");
+        }
+    }
 
     /** Sends a payment confirmation email to the given owner. */
     public static void sendPaymentConfirmation(Propietario owner, Pago pago) {
         // Skip if credentials are not configured yet
-        if (SENDER_APP_PASS == null || SENDER_APP_PASS.equals("your_app_password_here")) {
-            System.out.println("[EmailSender] App password not configured, skipping email.");
+        if (senderEmail == null || senderPass == null
+                || senderEmail.isEmpty() || senderPass.isEmpty()) {
             return;
         }
 
@@ -55,13 +72,13 @@ public class EmailSender {
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(SENDER_EMAIL, SENDER_APP_PASS);
+                return new PasswordAuthentication(senderEmail, senderPass);
             }
         });
 
         try {
             MimeMessage msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(SENDER_EMAIL, "Vista Verde Administration"));
+            msg.setFrom(new InternetAddress(senderEmail, "Vista Verde Administration"));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             msg.setSubject("Payment Confirmation — Vista Verde");
             msg.setContent(buildBody(owner, pago), "text/html; charset=utf-8");
