@@ -118,7 +118,7 @@ public class Database {
             ps.setInt(1, p.getNumeroCasa());
             ps.setString(2, p.getNombre());
             ps.setString(3, p.getTelefono());
-            ps.setString(4, p.getEmail());
+            ps.setString(4, p.getCorreo());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error saving owner: " + e.getMessage());
