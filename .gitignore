@@ -1,0 +1,10 @@
+/login-proyecto/build/
+/login-proyecto/dist/
+/login-proyecto/nbproject/private/
+
+# SQLite local database (do not commit user data)
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
