@@ -10,7 +10,7 @@ The system handles 30 houses, their owners and monthly maintenance fee payments 
 
 | Name | Student ID (Carné) | Role |
 |---|---|---|
-| Jose Angel Gonzalez | _your carné here_ | Developer / Project Lead |
+| Jose Angel Gonzalez | 0900-24-8660 | Developer / Project Lead |
 
 > _If working in a team, add the rest of the team members in this table._
 
@@ -149,7 +149,7 @@ El sistema maneja 30 casas, sus propietarios y los pagos de la cuota mensual de 
 
 | Nombre | Carné | Rol |
 |---|---|---|
-| Jose Angel Gonzalez | _tu carné aquí_ | Desarrollador / Líder de proyecto |
+| Jose Angel Gonzalez | 0900-24-8660 | Desarrollador / Líder de proyecto |
 
 > _Si trabajas en equipo, agrega los demás integrantes en esta tabla._
 
