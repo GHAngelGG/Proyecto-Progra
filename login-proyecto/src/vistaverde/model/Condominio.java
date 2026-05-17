@@ -1,5 +1,7 @@
 package vistaverde.model;
 
+import vistaverde.Database;
+import vistaverde.EmailSender;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -35,6 +37,7 @@ public class Condominio {
 
     public void setCuotaMensual(double cuota) {
         this.cuotaMensual = cuota;
+        Database.saveFee(cuota);
     }
 
     // Registra un propietario. Retorna false si la casa ya tiene dueño
@@ -44,6 +47,7 @@ public class Condominio {
             return false;
         }
         c.setPropietario(p);
+        Database.saveOwner(p);
         return true;
     }
 
@@ -75,7 +79,13 @@ public class Condominio {
             }
         }
 
-        c.agregarPago(new Pago(mes, anio, cuotaMensual));
+        Pago nuevoPago = new Pago(mes, anio, cuotaMensual);
+        c.agregarPago(nuevoPago);
+        Database.savePayment(numeroCasa, nuevoPago);
+
+        // Send payment confirmation email to the owner (runs in background)
+        new Thread(() -> EmailSender.sendPaymentConfirmation(c.getPropietario(), nuevoPago)).start();
+
         return "OK";
     }
 
