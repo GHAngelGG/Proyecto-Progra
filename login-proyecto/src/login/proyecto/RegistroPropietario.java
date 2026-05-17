@@ -177,6 +177,23 @@ public class RegistroPropietario extends JFrame {
             }
         });
 
+        // Only allow letters, accents, ñ and spaces in name field
+        ((AbstractDocument) tfFullName.getDocument()).setDocumentFilter(new DocumentFilter() {
+            private String clean(String s) {
+                return s.replaceAll("[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]", "");
+            }
+            @Override
+            public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr)
+                    throws BadLocationException {
+                super.insertString(fb, offset, clean(text), attr);
+            }
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                    throws BadLocationException {
+                super.replace(fb, offset, length, clean(text), attrs);
+            }
+        });
+
         return panel;
     }
 
@@ -285,6 +302,16 @@ public class RegistroPropietario extends JFrame {
 
         if (name.isEmpty()) {
             setStatus("Full name is required.", false);
+            tfFullName.requestFocus();
+            return;
+        }
+        if (name.length() < 3) {
+            setStatus("Name must be at least 3 characters.", false);
+            tfFullName.requestFocus();
+            return;
+        }
+        if (!name.contains(" ") || name.split("\\s+").length < 2) {
+            setStatus("Please enter first name and last name.", false);
             tfFullName.requestFocus();
             return;
         }
