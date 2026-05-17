@@ -28,7 +28,8 @@ public class RegistroPropietario extends JFrame {
     private final Condominio condominio;
 
     private JTextField tfHouseNumber;
-    private JTextField tfFullName;
+    private JTextField tfFirstNames;
+    private JTextField tfLastNames;
     private JTextField tfPhone;
     private JTextField tfEmail;
     private JLabel     lblStatus;
@@ -153,7 +154,8 @@ public class RegistroPropietario extends JFrame {
         panel.add(Box.createVerticalStrut(18));
 
         tfHouseNumber = addField(panel, "House number:",              true);
-        tfFullName    = addField(panel, "Full name:",                false);
+        tfFirstNames  = addField(panel, "First names:",              false);
+        tfLastNames   = addField(panel, "Last names:",               false);
         tfPhone       = addField(panel, "Phone (8 digits):",         false);
         tfEmail       = addField(panel, "Email address:",            false);
 
@@ -177,8 +179,8 @@ public class RegistroPropietario extends JFrame {
             }
         });
 
-        // Only allow letters, accents, ñ and spaces in name field
-        ((AbstractDocument) tfFullName.getDocument()).setDocumentFilter(new DocumentFilter() {
+        // Filtro de solo letras para nombres y apellidos
+        DocumentFilter onlyLetters = new DocumentFilter() {
             private String clean(String s) {
                 return s.replaceAll("[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]", "");
             }
@@ -192,7 +194,9 @@ public class RegistroPropietario extends JFrame {
                     throws BadLocationException {
                 super.replace(fb, offset, length, clean(text), attrs);
             }
-        });
+        };
+        ((AbstractDocument) tfFirstNames.getDocument()).setDocumentFilter(onlyLetters);
+        ((AbstractDocument) tfLastNames.getDocument()).setDocumentFilter(onlyLetters);
 
         return panel;
     }
@@ -267,7 +271,7 @@ public class RegistroPropietario extends JFrame {
 
         if (house.tienePropietario()) {
             setStatus("House " + number + " already has an owner: "
-                    + house.getPropietario().getNombre() + ".", false);
+                    + house.getPropietario().getNombreCompleto() + ".", false);
             return;
         }
 
@@ -287,7 +291,7 @@ public class RegistroPropietario extends JFrame {
         houseButtons[number - 1].setBackground(C_SELECTED);
         tfHouseNumber.setText(String.valueOf(number));
         setStatus("House " + number + " selected. Fill in the owner details.", true);
-        tfFullName.requestFocus();
+        tfFirstNames.requestFocus();
     }
 
     private void doRegister() {
@@ -296,23 +300,29 @@ public class RegistroPropietario extends JFrame {
             return;
         }
 
-        String name  = tfFullName.getText().trim();
-        String phone = tfPhone.getText().trim();
-        String email = tfEmail.getText().trim();
+        String nombres   = tfFirstNames.getText().trim();
+        String apellidos = tfLastNames.getText().trim();
+        String phone     = tfPhone.getText().trim();
+        String email     = tfEmail.getText().trim();
 
-        if (name.isEmpty()) {
-            setStatus("Full name is required.", false);
-            tfFullName.requestFocus();
+        if (nombres.isEmpty()) {
+            setStatus("First names are required.", false);
+            tfFirstNames.requestFocus();
             return;
         }
-        if (name.length() < 3) {
-            setStatus("Name must be at least 3 characters.", false);
-            tfFullName.requestFocus();
+        if (nombres.length() < 2) {
+            setStatus("First names must be at least 2 characters.", false);
+            tfFirstNames.requestFocus();
             return;
         }
-        if (!name.contains(" ") || name.split("\\s+").length < 2) {
-            setStatus("Please enter first name and last name.", false);
-            tfFullName.requestFocus();
+        if (apellidos.isEmpty()) {
+            setStatus("Last names are required.", false);
+            tfLastNames.requestFocus();
+            return;
+        }
+        if (apellidos.length() < 2) {
+            setStatus("Last names must be at least 2 characters.", false);
+            tfLastNames.requestFocus();
             return;
         }
         if (phone.isEmpty()) {
@@ -336,7 +346,7 @@ public class RegistroPropietario extends JFrame {
             return;
         }
 
-        Propietario owner = new Propietario(name, selectedHouse, phone, email);
+        Propietario owner = new Propietario(nombres, apellidos, selectedHouse, phone, email);
         boolean success = condominio.registrarPropietario(owner);
 
         if (!success) {
@@ -364,7 +374,8 @@ public class RegistroPropietario extends JFrame {
 
     private void clearFields() {
         tfHouseNumber.setText("");
-        tfFullName.setText("");
+        tfFirstNames.setText("");
+        tfLastNames.setText("");
         tfPhone.setText("");
         tfEmail.setText("");
     }

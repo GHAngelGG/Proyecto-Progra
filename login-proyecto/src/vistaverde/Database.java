@@ -32,7 +32,8 @@ public class Database {
         String createOwners =
             "CREATE TABLE IF NOT EXISTS propietarios (" +
             "  numero_casa INTEGER PRIMARY KEY," +
-            "  nombre TEXT NOT NULL," +
+            "  nombres TEXT NOT NULL," +
+            "  apellidos TEXT NOT NULL," +
             "  telefono TEXT," +
             "  email TEXT" +
             ")";
@@ -82,11 +83,12 @@ public class Database {
              Statement s = c.createStatement();
              ResultSet rs = s.executeQuery("SELECT * FROM propietarios")) {
             while (rs.next()) {
-                int numero  = rs.getInt("numero_casa");
-                String name = rs.getString("nombre");
-                String tel  = rs.getString("telefono");
-                String mail = rs.getString("email");
-                Propietario p = new Propietario(name, numero, tel, mail);
+                int numero       = rs.getInt("numero_casa");
+                String nombres   = rs.getString("nombres");
+                String apellidos = rs.getString("apellidos");
+                String tel       = rs.getString("telefono");
+                String mail      = rs.getString("email");
+                Propietario p = new Propietario(nombres, apellidos, numero, tel, mail);
                 condominio.getCasa(numero).setPropietario(p);
             }
         } catch (SQLException e) {
@@ -112,13 +114,14 @@ public class Database {
     /** Saves a newly registered owner. */
     public static void saveOwner(Propietario p) {
         String sql = "INSERT OR REPLACE INTO propietarios " +
-                     "(numero_casa, nombre, telefono, email) VALUES (?, ?, ?, ?)";
+                     "(numero_casa, nombres, apellidos, telefono, email) VALUES (?, ?, ?, ?, ?)";
         try (Connection c = connect();
              PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, p.getNumeroCasa());
-            ps.setString(2, p.getNombre());
-            ps.setString(3, p.getTelefono());
-            ps.setString(4, p.getCorreo());
+            ps.setString(2, p.getNombres());
+            ps.setString(3, p.getApellidos());
+            ps.setString(4, p.getTelefono());
+            ps.setString(5, p.getCorreo());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error saving owner: " + e.getMessage());
