@@ -31,6 +31,8 @@ public class AccountStatement extends JFrame {
 
     private JTextField tfHouseNumber;
     private JTextField tfOwnerName;
+    private JTextField tfPhone;
+    private JTextField tfEmail;
     private JTextField tfTotalPaid;
     private DefaultTableModel tableModel;
     private JTextArea taPending;
@@ -147,6 +149,8 @@ public class AccountStatement extends JFrame {
         panel.add(Box.createVerticalStrut(10));
         tfHouseNumber = addReadOnlyField(panel, "House number:");
         tfOwnerName   = addReadOnlyField(panel, "Owner:");
+        tfPhone       = addReadOnlyField(panel, "Phone:");
+        tfEmail       = addReadOnlyField(panel, "Email:");
         tfTotalPaid   = addReadOnlyField(panel, "Total paid:");
 
         panel.add(Box.createVerticalStrut(6));
@@ -297,7 +301,9 @@ public class AccountStatement extends JFrame {
 
     private void loadHouseData(Casa house) {
         tfHouseNumber.setText(String.valueOf(house.getNumero()));
-        tfOwnerName.setText(house.getPropietario().getNombre());
+        tfOwnerName.setText(house.getPropietario().getNombreCompleto());
+        tfPhone.setText(house.getPropietario().getTelefono());
+        tfEmail.setText(house.getPropietario().getCorreo());
         tfTotalPaid.setText(String.format("Q %.2f", house.getTotalPagado()));
 
         tableModel.setRowCount(0);
@@ -336,6 +342,8 @@ public class AccountStatement extends JFrame {
     private void clearInfo() {
         tfHouseNumber.setText("");
         tfOwnerName.setText("");
+        tfPhone.setText("");
+        tfEmail.setText("");
         tfTotalPaid.setText("");
         tableModel.setRowCount(0);
         taPending.setText("");
