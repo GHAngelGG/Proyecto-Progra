@@ -54,14 +54,18 @@ public class EmailSender {
         // Skip if credentials are not configured yet
         if (senderEmail == null || senderPass == null
                 || senderEmail.isEmpty() || senderPass.isEmpty()) {
+            System.out.println("[EmailSender] Credenciales no configuradas — saltando envio.");
             return;
         }
 
         // Skip if owner has no email
         String to = owner.getCorreo();
         if (to == null || to.isEmpty()) {
+            System.out.println("[EmailSender] Propietario sin correo — saltando envio.");
             return;
         }
+
+        System.out.println("[EmailSender] Intentando enviar correo a " + to + "...");
 
         Properties props = new Properties();
         props.put("mail.smtp.auth",            "true");
