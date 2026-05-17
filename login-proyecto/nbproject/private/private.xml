@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/src/login/proyecto/Inicio.java</file>
-            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/src/login/proyecto/Mantenimiento.java</file>
-            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/src/login/proyecto/Reinicio.java</file>
-            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/src/login/proyecto/UserManager.java</file>
-            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/src/login/proyecto/LoginProyecto.java</file>
+            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/login-proyecto/src/login/proyecto/Inicio.java</file>
+            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/login-proyecto/src/vistaverde/AppContext.java</file>
+            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/login-proyecto/src/vistaverde/Database.java</file>
+            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/login-proyecto/src/vistaverde/EmailSender.java</file>
+            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/login-proyecto/src/login/proyecto/UserManager.java</file>
+            <file>file:/C:/Users/josea/OneDrive/Documentos/NetBeansProjects/Login%20Proyecto/login-proyecto/src/login/proyecto/RegisterPayment.java</file>
         </group>
     </open-files>
 </project-private>
