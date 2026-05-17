@@ -2,24 +2,36 @@ package vistaverde.model;
 
 public class Propietario {
 
-    private String nombre;
+    private String nombres;
+    private String apellidos;
     private int numeroCasa;
     private String telefono;
     private String correo;
 
-    public Propietario(String nombre, int numeroCasa, String telefono, String correo) {
-        this.nombre = nombre;
+    public Propietario(String nombres, String apellidos, int numeroCasa, String telefono, String correo) {
+        this.nombres = nombres;
+        this.apellidos = apellidos;
         this.numeroCasa = numeroCasa;
         this.telefono = telefono;
         this.correo = correo;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombres() {
+        return nombres;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    // Devuelve nombre completo (nombres + apellidos)
+    public String getNombreCompleto() {
+        return nombres + " " + apellidos;
+    }
+
+    // Mantengo getNombre() por compatibilidad con codigo antiguo
+    public String getNombre() {
+        return getNombreCompleto();
     }
 
     public int getNumeroCasa() {
@@ -30,20 +42,12 @@ public class Propietario {
         return telefono;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
     public String getCorreo() {
         return correo;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
     @Override
     public String toString() {
-        return nombre + " — Casa " + numeroCasa;
+        return getNombreCompleto() + " — Casa " + numeroCasa;
     }
 }
