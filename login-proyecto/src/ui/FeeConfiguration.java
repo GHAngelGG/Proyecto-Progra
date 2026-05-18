@@ -1,7 +1,7 @@
-package login.proyecto;
+package ui;
 
-import vistaverde.AppContext;
-import vistaverde.model.Condominio;
+import logic.AppContext;
+import model.Condominio;
 import javax.swing.*;
 import java.awt.*;
 

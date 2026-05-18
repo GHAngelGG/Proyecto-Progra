@@ -1,4 +1,4 @@
-package vistaverde.model;
+package model;
 
 import java.util.ArrayList;
 

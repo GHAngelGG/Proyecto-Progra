@@ -1,6 +1,6 @@
-package vistaverde;
+package logic;
 
-import vistaverde.model.Condominio;
+import model.Condominio;
 
 /**
  * Singleton holding the shared Condominio instance.

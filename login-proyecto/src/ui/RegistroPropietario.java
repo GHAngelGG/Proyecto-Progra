@@ -1,9 +1,9 @@
-package login.proyecto;
+package ui;
 
-import vistaverde.AppContext;
-import vistaverde.model.Casa;
-import vistaverde.model.Condominio;
-import vistaverde.model.Propietario;
+import logic.AppContext;
+import model.Casa;
+import model.Condominio;
+import model.Propietario;
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;

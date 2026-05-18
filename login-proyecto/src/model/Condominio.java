@@ -1,7 +1,7 @@
-package vistaverde.model;
+package model;
 
-import vistaverde.Database;
-import vistaverde.EmailSender;
+import logic.Database;
+import logic.EmailSender;
 import java.util.ArrayList;
 import java.time.LocalDate;
 

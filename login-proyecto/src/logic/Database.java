@@ -1,9 +1,9 @@
-package vistaverde;
+package logic;
 
-import vistaverde.model.Casa;
-import vistaverde.model.Condominio;
-import vistaverde.model.Pago;
-import vistaverde.model.Propietario;
+import model.Casa;
+import model.Condominio;
+import model.Pago;
+import model.Propietario;
 import java.sql.*;
 
 /**

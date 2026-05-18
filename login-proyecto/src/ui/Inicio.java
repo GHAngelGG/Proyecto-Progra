@@ -1,4 +1,4 @@
-package login.proyecto;
+package ui;
 
 public class Inicio extends javax.swing.JFrame {
 

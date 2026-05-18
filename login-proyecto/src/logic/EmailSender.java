@@ -1,7 +1,7 @@
-package vistaverde;
+package logic;
 
-import vistaverde.model.Pago;
-import vistaverde.model.Propietario;
+import model.Pago;
+import model.Propietario;
 import java.io.FileInputStream;
 import java.util.Properties;
 import javax.mail.Authenticator;

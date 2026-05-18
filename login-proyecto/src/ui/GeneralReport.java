@@ -1,8 +1,8 @@
-package login.proyecto;
+package ui;
 
-import vistaverde.AppContext;
-import vistaverde.model.Casa;
-import vistaverde.model.Condominio;
+import logic.AppContext;
+import model.Casa;
+import model.Condominio;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;

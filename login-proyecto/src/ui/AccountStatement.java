@@ -1,23 +1,23 @@
-package login.proyecto;
+package ui;
 
-import vistaverde.AppContext;
-import vistaverde.model.Casa;
-import vistaverde.model.Condominio;
+import logic.AppContext;
+import model.Casa;
+import model.Condominio;
+import model.Pago;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.time.LocalDate;
+import java.util.ArrayList;
 
-public class RegisterPayment extends JFrame {
+public class AccountStatement extends JFrame {
 
     private static final Color C_HEADER   = new Color(28,  28,  28);
     private static final Color C_BG       = new Color(245, 245, 245);
     private static final Color C_TOOLBAR  = new Color(50,  50,  50);
     private static final Color C_BORDER   = new Color(200, 200, 200);
-    private static final Color C_SAVE     = new Color(34,  139, 60);
     private static final Color C_DANGER   = new Color(160, 30,  30);
     private static final Color C_NO_OWNER = new Color(140, 140, 140);
-    private static final Color C_PAID_UP  = new Color(34,  139, 60);
-    private static final Color C_PENDING  = new Color(200, 70,  40);
+    private static final Color C_HAS_DATA = new Color(34,  100, 180);
     private static final Color C_SELECTED = new Color(210, 150, 0);
 
     private static final String[] MONTHS = {
@@ -25,26 +25,23 @@ public class RegisterPayment extends JFrame {
         "July", "August", "September", "October", "November", "December"
     };
 
-    private int selectedHouse = 0;
-    private final JButton[] houseButtons = new JButton[30];
     private final Condominio condominio;
-    private final int currentMonth;
-    private final int currentYear;
+    private final JButton[] houseButtons = new JButton[30];
+    private int selectedHouse = 0;
 
     private JTextField tfHouseNumber;
     private JTextField tfOwnerName;
-    private JComboBox<String> cbMonth;
-    private JSpinner spYear;
-    private JTextField tfFee;
-    private JTextArea taHistory;
+    private JTextField tfPhone;
+    private JTextField tfEmail;
+    private JTextField tfTotalPaid;
+    private DefaultTableModel tableModel;
+    private JTextArea taPending;
     private JLabel lblStatus;
 
-    public RegisterPayment(JFrame parent) {
-        this.condominio   = AppContext.getInstance().getCondominio();
-        this.currentMonth = LocalDate.now().getMonthValue();
-        this.currentYear  = LocalDate.now().getYear();
+    public AccountStatement(JFrame parent) {
+        this.condominio = AppContext.getInstance().getCondominio();
 
-        setTitle("Register Payment — Vista Verde");
+        setTitle("Account Statement — Vista Verde");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
@@ -59,23 +56,27 @@ public class RegisterPayment extends JFrame {
         refreshMapColors();
     }
 
+    // ── Header ────────────────────────────────────────────────────────────────
+
     private JPanel buildHeader() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(C_HEADER);
         p.setPreferredSize(new Dimension(0, 52));
-        JLabel lbl = new JLabel("Register Payment", SwingConstants.CENTER);
+        JLabel lbl = new JLabel("Account Statement", SwingConstants.CENTER);
         lbl.setForeground(Color.WHITE);
         lbl.setFont(new Font("Arial", Font.BOLD, 17));
         p.add(lbl, BorderLayout.CENTER);
         return p;
     }
 
+    // ── Center ────────────────────────────────────────────────────────────────
+
     private JPanel buildCenter() {
         JPanel p = new JPanel(new GridLayout(1, 2, 16, 0));
         p.setBackground(C_BG);
         p.setBorder(BorderFactory.createEmptyBorder(16, 16, 8, 16));
         p.add(buildMapPanel());
-        p.add(buildFormPanel());
+        p.add(buildInfoPanel());
         return p;
     }
 
@@ -115,8 +116,7 @@ public class RegisterPayment extends JFrame {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 2));
         p.setBackground(C_BG);
         p.add(legendItem(C_NO_OWNER, "No owner"));
-        p.add(legendItem(C_PAID_UP,  "Paid up"));
-        p.add(legendItem(C_PENDING,  "Pending"));
+        p.add(legendItem(C_HAS_DATA, "Has payments"));
         p.add(legendItem(C_SELECTED, "Selected"));
         return p;
     }
@@ -136,66 +136,106 @@ public class RegisterPayment extends JFrame {
         return p;
     }
 
-    private JPanel buildFormPanel() {
+    private JPanel buildInfoPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(C_BORDER),
-            BorderFactory.createEmptyBorder(18, 18, 18, 18)
+            BorderFactory.createEmptyBorder(16, 16, 16, 16)
         ));
 
         addSectionTitle(panel, "House Information");
         panel.add(Box.createVerticalStrut(10));
         tfHouseNumber = addReadOnlyField(panel, "House number:");
         tfOwnerName   = addReadOnlyField(panel, "Owner:");
+        tfPhone       = addReadOnlyField(panel, "Phone:");
+        tfEmail       = addReadOnlyField(panel, "Email:");
+        tfTotalPaid   = addReadOnlyField(panel, "Total paid:");
 
         panel.add(Box.createVerticalStrut(6));
-        addSectionTitle(panel, "Payment Details");
-        panel.add(Box.createVerticalStrut(10));
+        addSectionTitle(panel, "Paid months");
+        panel.add(Box.createVerticalStrut(8));
 
-        // Month
-        addLabel(panel, "Month:");
-        cbMonth = new JComboBox<>(MONTHS);
-        cbMonth.setSelectedIndex(currentMonth - 1);
-        cbMonth.setFont(new Font("Arial", Font.PLAIN, 13));
-        cbMonth.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
-        cbMonth.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(cbMonth);
-        panel.add(Box.createVerticalStrut(12));
+        String[] columns = {"Month", "Year", "Amount (Q)"};
+        tableModel = new DefaultTableModel(columns, 0) {
+            @Override public boolean isCellEditable(int row, int col) { return false; }
+        };
 
-        // Year
-        addLabel(panel, "Year:");
-        spYear = new JSpinner(new SpinnerNumberModel(currentYear, 2024, currentYear, 1));
-        spYear.setFont(new Font("Arial", Font.PLAIN, 13));
-        spYear.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
-        spYear.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(spYear);
-        panel.add(Box.createVerticalStrut(12));
+        JTable table = new JTable(tableModel);
+        table.setFont(new Font("Arial", Font.PLAIN, 12));
+        table.setRowHeight(24);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        table.getTableHeader().setBackground(new Color(50, 50, 50));
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.setSelectionBackground(new Color(210, 230, 255));
+        table.setGridColor(C_BORDER);
+        table.setShowGrid(true);
+        table.getColumnModel().getColumn(0).setPreferredWidth(110);
+        table.getColumnModel().getColumn(1).setPreferredWidth(60);
+        table.getColumnModel().getColumn(2).setPreferredWidth(90);
 
-        // Fee
-        tfFee = addReadOnlyField(panel, "Monthly fee:");
-        tfFee.setText(String.format("Q %.2f", condominio.getCuotaMensual()));
-
-        // Payment history
-        panel.add(Box.createVerticalStrut(4));
-        addSectionTitle(panel, "Paid months this year:");
-        panel.add(Box.createVerticalStrut(6));
-
-        taHistory = new JTextArea(3, 20);
-        taHistory.setEditable(false);
-        taHistory.setFont(new Font("Arial", Font.PLAIN, 11));
-        taHistory.setBackground(new Color(245, 245, 245));
-        taHistory.setWrapStyleWord(true);
-        taHistory.setLineWrap(true);
-        JScrollPane sp = new JScrollPane(taHistory);
+        JScrollPane sp = new JScrollPane(table);
         sp.setAlignmentX(Component.LEFT_ALIGNMENT);
-        sp.setMaximumSize(new Dimension(Integer.MAX_VALUE, 64));
         sp.setBorder(BorderFactory.createLineBorder(C_BORDER));
+        sp.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
         panel.add(sp);
+
+        panel.add(Box.createVerticalStrut(8));
+        addSectionTitle(panel, "Pending months (this year):");
+        panel.add(Box.createVerticalStrut(6));
+
+        taPending = new JTextArea(2, 20);
+        taPending.setEditable(false);
+        taPending.setFont(new Font("Arial", Font.PLAIN, 12));
+        taPending.setBackground(new Color(255, 240, 240));
+        taPending.setForeground(new Color(160, 30, 30));
+        taPending.setWrapStyleWord(true);
+        taPending.setLineWrap(true);
+        JScrollPane spPending = new JScrollPane(taPending);
+        spPending.setAlignmentX(Component.LEFT_ALIGNMENT);
+        spPending.setMaximumSize(new Dimension(Integer.MAX_VALUE, 55));
+        spPending.setBorder(BorderFactory.createLineBorder(C_BORDER));
+        panel.add(spPending);
 
         return panel;
     }
+
+    // ── Footer ────────────────────────────────────────────────────────────────
+
+    private JPanel buildFooter() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(C_TOOLBAR);
+        panel.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+
+        lblStatus = new JLabel(" ");
+        lblStatus.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblStatus.setForeground(new Color(180, 180, 180));
+        panel.add(lblStatus, BorderLayout.WEST);
+
+        JButton btnClose = makeBtn("Close", C_DANGER);
+        btnClose.addActionListener(e -> dispose());
+
+        JPanel btns = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        btns.setBackground(C_TOOLBAR);
+        btns.add(btnClose);
+        panel.add(btns, BorderLayout.EAST);
+        return panel;
+    }
+
+    private JButton makeBtn(String text, Color bg) {
+        JButton btn = new JButton(text);
+        btn.setBackground(bg);
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Arial", Font.BOLD, 12));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setPreferredSize(new Dimension(90, 32));
+        return btn;
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private void addSectionTitle(JPanel parent, String text) {
         JLabel lbl = new JLabel(text);
@@ -227,48 +267,8 @@ public class RegisterPayment extends JFrame {
             BorderFactory.createEmptyBorder(4, 8, 4, 8)
         ));
         parent.add(tf);
-        parent.add(Box.createVerticalStrut(12));
+        parent.add(Box.createVerticalStrut(10));
         return tf;
-    }
-
-    private JPanel buildFooter() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(C_TOOLBAR);
-        panel.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-
-        lblStatus = new JLabel(" ");
-        lblStatus.setFont(new Font("Arial", Font.PLAIN, 12));
-        lblStatus.setForeground(new Color(180, 180, 180));
-        panel.add(lblStatus, BorderLayout.WEST);
-
-        JPanel btns = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
-        btns.setBackground(C_TOOLBAR);
-
-        JButton btnRegister = makeBtn("Register", C_SAVE);
-        JButton btnClear    = makeBtn("Clear",    new Color(100, 100, 100));
-        JButton btnClose    = makeBtn("Close",    C_DANGER);
-
-        btnRegister.addActionListener(e -> doRegister());
-        btnClear.addActionListener(e -> doClear());
-        btnClose.addActionListener(e -> dispose());
-
-        btns.add(btnRegister);
-        btns.add(btnClear);
-        btns.add(btnClose);
-        panel.add(btns, BorderLayout.EAST);
-        return panel;
-    }
-
-    private JButton makeBtn(String text, Color bg) {
-        JButton btn = new JButton(text);
-        btn.setBackground(bg);
-        btn.setForeground(Color.WHITE);
-        btn.setFont(new Font("Arial", Font.BOLD, 12));
-        btn.setFocusPainted(false);
-        btn.setBorderPainted(false);
-        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setPreferredSize(new Dimension(90, 32));
-        return btn;
     }
 
     // ── Logic ─────────────────────────────────────────────────────────────────
@@ -288,70 +288,68 @@ public class RegisterPayment extends JFrame {
         if (selectedHouse == number) {
             refreshButtonColor(number);
             selectedHouse = 0;
-            clearForm();
+            clearInfo();
             setStatus("Selection cleared.", true);
             return;
         }
 
         selectedHouse = number;
         houseButtons[number - 1].setBackground(C_SELECTED);
-        tfHouseNumber.setText(String.valueOf(number));
-        tfOwnerName.setText(house.getPropietario().getNombre());
-        updateHistory(house);
-        setStatus("House " + number + " selected. Choose month and year, then click Register.", true);
+        loadHouseData(house);
+        setStatus("House " + number + " — " + house.getPropietario().getNombre(), true);
     }
 
-    private void doRegister() {
-        if (selectedHouse == 0) {
-            setStatus("Please select a house on the map first.", false);
-            return;
-        }
+    private void loadHouseData(Casa house) {
+        tfHouseNumber.setText(String.valueOf(house.getNumero()));
+        tfOwnerName.setText(house.getPropietario().getNombreCompleto());
+        tfPhone.setText(house.getPropietario().getTelefono());
+        tfEmail.setText(house.getPropietario().getCorreo());
+        tfTotalPaid.setText(String.format("Q %.2f", house.getTotalPagado()));
 
-        int month = cbMonth.getSelectedIndex() + 1;
-        int year  = (int) spYear.getValue();
+        tableModel.setRowCount(0);
+        ArrayList<Pago> pagos = house.getPagos();
 
-        String result = condominio.registrarPago(selectedHouse, month, year);
-
-        if ("OK".equals(result)) {
-            refreshButtonColor(selectedHouse);
-            updateHistory(condominio.getCasa(selectedHouse));
-            setStatus("Payment registered: House " + selectedHouse
-                    + " — " + MONTHS[month - 1] + " " + year + ".", true);
+        if (pagos.isEmpty()) {
+            setStatus("House " + house.getNumero() + " has no payments recorded.", false);
         } else {
-            setStatus(result, false);
+            for (Pago p : pagos) {
+                tableModel.addRow(new Object[]{
+                    MONTHS[p.getMes() - 1],
+                    p.getAnio(),
+                    String.format("Q %.2f", p.getMonto())
+                });
+            }
         }
-    }
 
-    private void doClear() {
-        if (selectedHouse > 0) {
-            refreshButtonColor(selectedHouse);
-            selectedHouse = 0;
-        }
-        clearForm();
-        setStatus(" ", true);
-    }
-
-    private void clearForm() {
-        tfHouseNumber.setText("");
-        tfOwnerName.setText("");
-        taHistory.setText("");
-    }
-
-    private void updateHistory(Casa house) {
-        java.util.ArrayList<Integer> paid = house.getMesesPagados(currentYear);
-        if (paid.isEmpty()) {
-            taHistory.setText("No payments recorded for " + currentYear + ".");
+        // Pending months for current year
+        int currentMonth = java.time.LocalDate.now().getMonthValue();
+        int currentYear  = java.time.LocalDate.now().getYear();
+        java.util.ArrayList<Integer> pending = house.getMesesPendientes(currentMonth, currentYear);
+        if (pending.isEmpty()) {
+            taPending.setText("No pending months — all paid up to date.");
+            taPending.setForeground(new Color(34, 139, 60));
         } else {
             StringBuilder sb = new StringBuilder();
-            for (int m : paid) {
+            for (int m : pending) {
                 if (sb.length() > 0) sb.append(", ");
                 sb.append(MONTHS[m - 1]);
             }
-            taHistory.setText(sb.toString());
+            taPending.setText(sb.toString());
+            taPending.setForeground(new Color(160, 30, 30));
         }
     }
 
-    public void refreshMapColors() {
+    private void clearInfo() {
+        tfHouseNumber.setText("");
+        tfOwnerName.setText("");
+        tfPhone.setText("");
+        tfEmail.setText("");
+        tfTotalPaid.setText("");
+        tableModel.setRowCount(0);
+        taPending.setText("");
+    }
+
+    private void refreshMapColors() {
         for (int i = 0; i < 30; i++) {
             if (selectedHouse == i + 1) {
                 houseButtons[i].setBackground(C_SELECTED);
@@ -363,15 +361,13 @@ public class RegisterPayment extends JFrame {
 
     private void refreshButtonColor(int number) {
         Casa house = condominio.getCasa(number);
-        Color color;
         if (!house.tienePropietario()) {
-            color = C_NO_OWNER;
-        } else if (house.tienePago(currentMonth, currentYear)) {
-            color = C_PAID_UP;
+            houseButtons[number - 1].setBackground(C_NO_OWNER);
+        } else if (!house.getPagos().isEmpty()) {
+            houseButtons[number - 1].setBackground(C_HAS_DATA);
         } else {
-            color = C_PENDING;
+            houseButtons[number - 1].setBackground(C_NO_OWNER);
         }
-        houseButtons[number - 1].setBackground(color);
     }
 
     private void setStatus(String message, boolean success) {
