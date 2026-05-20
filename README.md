@@ -129,6 +129,37 @@ Proyecto-Progra/
 - Fazt Code (Java en español) — https://www.youtube.com/@FaztCode
 - Stack Overflow — for specific issues (DocumentFilter, JTable rendering)
 - GitHub Docs — branching, pull requests, merge workflow
+- GitHub Docs — Creating a commit with multiple authors (Co-Authored-By trailer): https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors
+
+---
+
+## AI assistance and attribution
+
+During development I consulted **Claude (Anthropic)** for specific concepts and
+small code snippets. Whenever I incorporated a suggestion into a commit, I added
+a `Co-Authored-By: Claude <noreply@anthropic.com>` trailer to that commit as a
+transparency practice — this is the standard way GitHub recommends crediting
+collaborators (human or otherwise) in a commit message. That's why Claude shows
+up in the Contributors panel: not because the AI made commits, but because I
+gave explicit attribution following GitHub's documented guidance.
+
+Concrete things I copied/adapted from Claude suggestions:
+
+- The `DocumentFilter` snippet for blocking non-digit input in the phone field
+- The standard email validation regex: `^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`
+- The fix for the `NoClassDefFoundError: javax.activation.DataHandler` error
+  on Java 25+ (add `javax.activation-1.2.0.jar` to the project)
+- The `PreparedStatement` template to prevent SQL injection
+- The single line to activate FlatLaf: `UIManager.setLookAndFeel(new FlatLightLaf())`
+
+The architecture, screen design, business logic, validations, testing and
+overall project decisions are mine.
+
+Where I learned about the `Co-Authored-By` practice:
+- GitHub official docs (link above)
+- Atlassian Git tutorials — https://www.atlassian.com/git
+- Bro Code Git tutorials on YouTube
+- dev.to articles about Git etiquette and pair attribution
 
 ---
 ---
