@@ -6,6 +6,21 @@ The system handles 30 houses, their owners and monthly maintenance fee payments 
 
 ---
 
+## Team / Equipo
+
+| Name | Student ID (Carné) | Role |
+|---|---|---|
+| Jose Angel Gonzalez | 0900-24-8660 | Developer / Project Lead |
+
+---
+
+## Project links
+
+- **GitHub repository:** https://github.com/GHAngelGG/Proyecto-Progra
+- **Jira board:** https://joseangmil100.atlassian.net/jira/software/projects/VV/boards
+
+---
+
 ## What the system does
 
 The administrator can:
