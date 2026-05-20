@@ -6,23 +6,6 @@ The system handles 30 houses, their owners and monthly maintenance fee payments 
 
 ---
 
-## Team / Equipo
-
-| Name | Student ID (Carné) | Role |
-|---|---|---|
-| Jose Angel Gonzalez | 0900-24-8660 | Developer / Project Lead |
-
-> _If working in a team, add the rest of the team members in this table._
-
----
-
-## Project links
-
-- **GitHub repository:** https://github.com/GHAngelGG/Proyecto-Progra
-- **Jira board:** https://joseangmil100.atlassian.net/jira/software/projects/VV/boards
-
----
-
 ## What the system does
 
 The administrator can:
@@ -38,8 +21,6 @@ The administrator can:
 ---
 
 ## Screenshots
-
-> _Screenshots of the 8 screens go here. Replace these placeholders by capturing each screen and saving them in `docs/screenshots/`._
 
 | # | Screen | Image |
 |---|---|---|
@@ -108,16 +89,16 @@ The administrator can:
 ```
 Proyecto-Progra/
 ├── README.md
-├── diagrama-clases.xml      ← class diagram (import to diagrams.io)
 ├── docs/
 │   ├── manual/              ← user manual PDF
-│   ├── diagramas/           ← class diagram image
+│   ├── diagramas/           ← class diagram
 │   └── screenshots/         ← screen captures
 └── login-proyecto/
     ├── lib/                 ← external JAR libraries
     ├── src/
-    │   ├── login/proyecto/  ← Java Swing screens
-    │   └── vistaverde/      ← data model + database + email
+    │   ├── ui/              ← Java Swing screens
+    │   ├── model/           ← data classes
+    │   └── logic/           ← database + email + context
     └── nbproject/
 ```
 
@@ -142,23 +123,6 @@ Proyecto-Progra/
 Aplicación de escritorio para administrar el Condominio Vista Verde. Desarrollada como proyecto final del curso de **Programación I** en la **Universidad Mariano Gálvez de Guatemala**.
 
 El sistema maneja 30 casas, sus propietarios y los pagos de la cuota mensual de mantenimiento (Q1,500.00 cada una por defecto).
-
----
-
-## Equipo
-
-| Nombre | Carné | Rol |
-|---|---|---|
-| Jose Angel Gonzalez | 0900-24-8660 | Desarrollador / Líder de proyecto |
-
-> _Si trabajas en equipo, agrega los demás integrantes en esta tabla._
-
----
-
-## Enlaces del proyecto
-
-- **Repositorio GitHub:** https://github.com/GHAngelGG/Proyecto-Progra
-- **Tablero Jira:** https://joseangmil100.atlassian.net/jira/software/projects/VV/boards
 
 ---
 
