@@ -5,7 +5,6 @@ public class Inicio extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger =
         java.util.logging.Logger.getLogger(Inicio.class.getName());
 
-    // ── Design constants (white / gray / black) ──────────────────────────────
     private static final java.awt.Color C_HEADER = new java.awt.Color(28, 28, 28);
     private static final java.awt.Color C_BTN    = new java.awt.Color(50, 50, 50);
     private static final java.awt.Color C_BG     = new java.awt.Color(245, 245, 245);
@@ -13,8 +12,7 @@ public class Inicio extends javax.swing.JFrame {
     private static final java.awt.Color C_DANGER = new java.awt.Color(180, 30, 30);
     private static final java.awt.Color C_BORDER = new java.awt.Color(200, 200, 200);
 
-    // ── State ────────────────────────────────────────────────────────────────
-    private int loginAttempts = 0;
+   private int loginAttempts = 0;
     private static final int MAX_ATTEMPTS = 3;
 
     public Inicio() {
