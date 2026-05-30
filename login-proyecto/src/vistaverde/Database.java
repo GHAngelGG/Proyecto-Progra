@@ -6,17 +6,7 @@ import vistaverde.model.Pago;
 import vistaverde.model.Propietario;
 import java.sql.*;
 
-/**
- * SQLite persistence layer for Vista Verde.
- *
- * Stores the data in a local file "vistaverde.db" in the project root.
- * On startup, loads all owners, payments and the current fee into the
- * in-memory Condominio. After each user action (register owner, register
- * payment, change fee), the corresponding method in this class is called
- * so the change is written immediately to disk.
- *
- * No data is lost when the app closes.
- */
+
 public class Database {
 
     private static final String DB_FILE = "vistaverde.db";

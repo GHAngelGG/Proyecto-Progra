@@ -158,7 +158,8 @@ public class RegistroPropietario extends JFrame {
         tfLastNames   = addField(panel, "Last names:",               false);
         tfPhone       = addField(panel, "Phone (8 digits):",         false);
         tfEmail       = addField(panel, "Email address:",            false);
-
+        
+        //VALIDA MIENTRAS ESCRIBO
         // Only allow digits in phone field, max 8 characters
         ((AbstractDocument) tfPhone.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
