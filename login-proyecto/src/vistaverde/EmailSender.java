@@ -13,23 +13,12 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-/**
- * Sends a payment confirmation email to the owner.
- *
- * Reads sender credentials from "email.properties" in the project root.
- * The file is gitignored so the password never gets committed.
- *
- * Required keys:
- *   sender.email     = your.gmail@gmail.com
- *   sender.password  = 16-char Gmail app password (no spaces)
- *
- * If the file is missing or empty, the email is silently skipped.
- */
+
 public class EmailSender {
 
-    private static final String CONFIG_FILE = "email.properties";
-    private static final String SMTP_HOST = "smtp.gmail.com";
-    private static final String SMTP_PORT = "587";
+    private static final String CONFIG_FILE = "email.properties";//credenciales
+    private static final String SMTP_HOST = "smtp.gmail.com";// servidor
+    private static final String SMTP_PORT = "587";// puerto de enlace
 
     private static String senderEmail = null;
     private static String senderPass  = null;
@@ -65,21 +54,24 @@ public class EmailSender {
             return;
         }
 
-        System.out.println("[EmailSender] Intentando enviar correo a " + to + "...");
+        System.out.println("[EmailSender] Intentando enviar correo a " + to + "...");//En lo que envia
 
+        //Conecta a gmail y envia
         Properties props = new Properties();
+        //Como se conecta
         props.put("mail.smtp.auth",            "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host",            SMTP_HOST);
         props.put("mail.smtp.port",            SMTP_PORT);
-
+        
+        //Autenticar
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(senderEmail, senderPass);
             }
         });
-
+            //Enviar desde /quien recibe/ asunto/envio
         try {
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(senderEmail, "Vista Verde Administration"));
@@ -94,7 +86,7 @@ public class EmailSender {
             System.err.println("[EmailSender] Could not send email: " + e.getMessage());
         }
     }
-
+            //Que dice el contenido
     private static String buildBody(Propietario owner, Pago pago) {
         return "<div style='font-family: Arial, sans-serif; max-width: 560px;'>"
              + "<div style='background:#1c1c1c; color:white; padding:16px; text-align:center;'>"
@@ -114,7 +106,7 @@ public class EmailSender {
              + "Please keep this email as proof of payment.</p>"
              + "</div></div>";
     }
-
+            //Crear filas 
     private static String row(String label, String value) {
         return "<tr>"
              + "<td style='padding:8px 12px; border-bottom:1px solid #ddd; color:#666;'>" + label + "</td>"

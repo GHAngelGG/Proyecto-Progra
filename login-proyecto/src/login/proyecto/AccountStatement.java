@@ -50,7 +50,7 @@ public class AccountStatement extends JFrame {
         add(buildCenter(), BorderLayout.CENTER);
         add(buildFooter(), BorderLayout.SOUTH);
 
-        setPreferredSize(new Dimension(820, 560));
+        setPreferredSize(new Dimension(820, 660));
         pack();
         setLocationRelativeTo(parent);
         refreshMapColors();
@@ -76,7 +76,17 @@ public class AccountStatement extends JFrame {
         p.setBackground(C_BG);
         p.setBorder(BorderFactory.createEmptyBorder(16, 16, 8, 16));
         p.add(buildMapPanel());
-        p.add(buildInfoPanel());
+
+        // Envolver el panel de informacion en un scroll para que todo el
+        // contenido (pagos y meses pendientes) sea visible aunque la ventana
+        // sea pequena.
+        JScrollPane infoScroll = new JScrollPane(buildInfoPanel(),
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        infoScroll.setBorder(null);
+        infoScroll.getVerticalScrollBar().setUnitIncrement(16);
+        p.add(infoScroll);
+
         return p;
     }
 
@@ -194,7 +204,7 @@ public class AccountStatement extends JFrame {
         taPending.setLineWrap(true);
         JScrollPane spPending = new JScrollPane(taPending);
         spPending.setAlignmentX(Component.LEFT_ALIGNMENT);
-        spPending.setMaximumSize(new Dimension(Integer.MAX_VALUE, 55));
+        spPending.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         spPending.setBorder(BorderFactory.createLineBorder(C_BORDER));
         panel.add(spPending);
 

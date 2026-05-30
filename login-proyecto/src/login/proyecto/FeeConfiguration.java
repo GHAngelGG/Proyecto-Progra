@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class FeeConfiguration extends JFrame {
-
+    //Interfaz
     private static final Color C_HEADER  = new Color(28,  28,  28);
     private static final Color C_BG      = new Color(245, 245, 245);
     private static final Color C_TOOLBAR = new Color(50,  50,  50);
@@ -14,6 +14,7 @@ public class FeeConfiguration extends JFrame {
     private static final Color C_SAVE    = new Color(34,  139, 60);
     private static final Color C_DANGER  = new Color(160, 30,  30);
 
+    //Obtiene condominio 
     private final Condominio condominio;
     private JTextField tfCurrentFee;
     private JTextField tfNewFee;
@@ -153,7 +154,7 @@ public class FeeConfiguration extends JFrame {
         btn.setPreferredSize(new Dimension(90, 32));
         return btn;
     }
-
+        //Llama y valida si son valores validos
     private void doSave() {
         String raw = tfNewFee.getText().trim();
 
@@ -161,7 +162,7 @@ public class FeeConfiguration extends JFrame {
             setStatus("Please enter a value.", false);
             return;
         }
-
+       //Convierte valores
         double newFee;
         try {
             newFee = Double.parseDouble(raw);
@@ -174,7 +175,7 @@ public class FeeConfiguration extends JFrame {
             setStatus("Fee must be greater than zero.", false);
             return;
         }
-
+        //Llama condominio
         condominio.setCuotaMensual(newFee);
         tfCurrentFee.setText(String.format("%.2f", newFee));
         tfNewFee.setText("");
